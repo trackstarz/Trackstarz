@@ -1,0 +1,26 @@
+{% extends "userprofile/base.html" %}
+
+{% block content %}
+
+        <div class="container-fluid">
+                <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                <h1>Login to TRACKSTARZ {{user.username}}</h1>
+
+                                <br></br>
+                                <form id="login_form" method="post" action="{% url 'login' %}">
+                                        {% csrf_token %}
+                                        <label for="username">Username:</label>
+                                        <input type="text" name="username" placeholder="Username">
+                                        <br></br>
+                                        <label for="password">Password:</label>
+                                        <input type="password" name="password" placeholder="Password">
+                                        <br></br>
+                                        <input type="submit" name="" value="Login">
+                                </form>  
+                        </div>
+                </div>
+        </div>
+	
+{% endblock %}

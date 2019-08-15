@@ -1,0 +1,77 @@
+{% extends 'userprofile/base.html' %}
+
+{% block content %}
+{% include "universe/profilefeature.html" %}
+<div class="container">
+	<div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        {% include "universe/includes/universeprofilesidebarleft.html" %}
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+
+
+            {% if request.user == u %}
+
+                <h1>Friends</h1>
+                <ul>
+                {% for friend in friends_list %}
+                    <li><a href="{{ friend.user.userprofile.get_absolute_url }}">{{ friend.user.username }}</a></li>
+                {% endfor %}
+                </ul>
+                <hr>
+                <h2>Sent Friend requests</h2>
+                <ul>
+                {% for s_request in sent_friend_requests %}
+                    <li><a href="{{ s_request.to_user.userprofile.get_absolute_url }}">{{ s_request.to_user.username }}</a></li>
+                {% endfor %}
+                </ul>
+                <hr>
+                <h2>Recieved Friend Requests</h2>
+                {% for r_request in rec_friend_requests %}
+                    <p><a href="{{ r_request.from_user.userprofile.get_absolute_url }}">{{ r_request.from_user.username }}</a></p>
+                    <small><a class='btn btn-primary' href="/universe/friend-request/accept/{{ r_request.from_user.id }}">Accept</a></small></small>
+                    <small><a class='btn btn-primary' href="/universe/friend-request/delete/{{ r_request.from_user.id }}">Ignore</a></small></small>
+                    <br/><br/>
+                {% endfor %}
+
+                {% else %}
+
+                {% if button_status == 'not_friend' %}
+                    <small><a class='btn btn-primary' href="/universe/friend-request/send/{{ u.id }}">Add Friend</a></small>
+                {% elif button_status == 'friend_request_sent' %}
+                    <small><a class='btn btn-primary' href="/universe/friend-request/cancel/{{ u.id }}">Cancel Request</a></small>
+                {% endif %}
+            
+            {% endif %}
+
+
+            
+                     
+                
+            {% if slug in link_list or slug == user.userprofile.slug or slug == 'trackstarz' %} <!--only allowed to see the profile posts of friends -->           
+                {% for burst in burst|dictsortreversed:"timestamp" %} <!-- show bursts in reverse order -->
+                        {% if burst.author.userprofile.slug == slug %} <!-- only display the selected profile's posts on their profile page -->
+                                <div class="burst">
+                                <h6><img id="burst_image" src="{{MEDIA_URL}}{{ burst.author.userprofile.picture }}"></img> <b>{{burst.author.userprofile.displayname}}</b>  <small><b>@{{ burst.author.username }}</b></small> <small>{{ burst.timestamp|timesince }} ago</small><a href="/"><i class="fa fa-ellipsis-h burstmenu"></i></a></h6>
+                                {% if burst.title %}
+                                <h2>{{ burst.title }}</h2>
+                                {% endif %}
+                                <p>{{ burst.bodytext }}</p>
+                                {% if burst.picture %}
+                                <img src="{{MEDIA_URL}}{{burst.picture}}" width="100%"></img>
+                                {% endif %}
+                                </div>
+                        {% endif %}
+                {% endfor %}
+            {% endif %}
+                        
+                
+                        
+                
+                        
+
+        </div>
+		
+	</div>
+</div>
+{% endblock content %}

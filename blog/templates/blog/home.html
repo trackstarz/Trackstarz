@@ -1,0 +1,73 @@
+{% extends "userprofile/base.html" %}
+
+{% block content %}
+{% include "userprofile/feature.html" %}
+<div class="container">
+<div class="row">
+<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+	{% include "blog/includes/homesidebarleft.html" %}
+</div>
+<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+        {% if user.is_authenticated %}
+        <div id="burst_input">
+	<h4>Update Status</h4>
+	
+	<form id="burst_form" method="POST" action="/" enctype="multipart/form-data">
+
+                {% csrf_token %}
+                <ul class="burst_inputs">
+                    <li id="input_bodytext" class="burst_input">{{ burst_form.bodytext }}<input id="burst_submit" type="submit" name="submit" value="post" /></li>
+                    <li id="input_picture" class="burst_input">{{ burst_form.picture }}</li><label for="id_picture"><i class="fa fa-camera"><span id = "input_picture_span"></span></i></label>
+                </ul>
+ 
+            
+	</form>
+        </div>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+                {% for burst in burst|dictsortreversed:"timestamp" %}
+                        {% if burst.author.userprofile.slug in friends_list or burst.trackstarz_article or burst.author == user %}
+                                <div class="burst">
+                                <h6><img id="burst_image" src="{{MEDIA_URL}}{{ burst.author.userprofile.picture }}"></img> <b>{{burst.author.userprofile.displayname}}</b>  <small><b>@{{ burst.author.username }}</b></small> <small>{{ burst.timestamp|timesince }} ago</small><a href="/"><i class="fa fa-ellipsis-h burstmenu"></i></a></h6>
+                                {% if burst.title %}
+                                <h2>{{ burst.title }}</h2>
+                                {% endif %}
+                                <p>{{ burst.bodytext }}</p>
+                                {% if burst.picture %}
+                                <img src="{{MEDIA_URL}}{{burst.picture}}" width="100%"></img>
+                                {% endif %}
+                                </div>
+                        {% endif %}
+                {% endfor %}
+        
+
+        {% else %}
+                {% for burst in burst|dictsortreversed:"timestamp" %}
+                        {% if burst.trackstarz_article %}
+                                <div class="burst">
+                                <h6><img id="burst_image" src="{{MEDIA_URL}}{{ burst.author.userprofile.picture }}"></img> <b>{{burst.author.userprofile.displayname}}</b>  <small><b>@{{ burst.author.username }}</b></small> <small>{{ burst.timestamp|timesince }} ago</small><a href="/"><i class="fa fa-ellipsis-h burstmenu"></i></a></h6>
+                                {% if burst.title %}
+                                <h2>{{ burst.title }}</h2>
+                                {% endif %}
+                                <p>{{ burst.bodytext }}</p>
+                                {% if burst.picture %}
+                                        <img src="{{MEDIA_URL}}{{burst.picture}}" width="100%"></img>
+                                {% endif %}
+                                </div>
+                        {% endif %}
+                {% endfor %}
+
+        {% endif %}
+        
+{% include "blog/includes/htmlsnippet.html" %}
+</div>
+<div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+	{% include "blog/includes/homesidebarright.html" %}
+</div>
+</div>
+</div>
+       
+
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "userprofile/base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+        <h2>Search results</h2>
+        </br>
+        {% for result in queryset %}
+            <h4>{{ result.title }}</h4>
+            <p>{{ result.bodytext }}</p>
+            {% if result.picture %}
+                <a href="{{MEDIA_URL}}{{ result.picture }}" }}><img width="100%" src="{{MEDIA_URL}}{{ result.picture }}"></img></a>
+            {% endif %}
+        {% endfor %}
+    </div>
+    </div>
+</div>
+
+{% endblock %}

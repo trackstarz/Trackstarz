@@ -1,0 +1,18 @@
+<ul class="nav navbar-nav navbar-left">
+        {% if user.is_authenticated %}
+        <div class="info_pill">
+        <li><img class="rounded" src="{{MEDIA_URL}}{{picture}}" width="100%" height="auto" /></li>
+        
+        <h4 class="nudgedown">{{displayname}}</h4>
+        <h6>@{{ username }}</h6>
+        </div>
+
+        <p><a href="/universe/{{request.user.userprofile.slug}}">HOME</a></p>
+        <p><a href="/universe/">UNIVERSE</a></p>
+
+	{% else %}
+        <div class="info_pill">
+                <h6>Welcome to the Trackstarz Universe!</h6>
+        </div>
+	{% endif %}
+
