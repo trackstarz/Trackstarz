@@ -19,7 +19,7 @@ pep8==1.7.0
 pyflakes==1.1.0
 pyroma==2.0.2
 pytz==2016.2
-requests==2.9.1
+requests==2.20.0
 six==1.10.0
 snowballstemmer==1.2.1
 sphinx-rtd-theme==0.1.9
