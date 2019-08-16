@@ -6,9 +6,9 @@
         <h4 class="nudgedown">{{request.user.userprofile.displayname}}</h4>
         <h6>@{{ request.user.username }}</h6>
         </div>
-
-        <p><a href="/universe/{{request.user.userprofile.slug}}">HOME</a></p>
-        <p><a href="/universe/">UNIVERSE</a></p>
+        <br/>
+        <p class="sidebarmenu"><a href="/universe/{{request.user.userprofile.slug}}"><i class="fa fa-home" aria-hidden="true"></i> HOME</a></p>
+        <p class="sidebarmenu"><a href="/universe/"><i class="fa fa-globe" aria-hidden="true"></i> UNIVERSE</a></p>
 
 	{% else %}
         <div class="info_pill">

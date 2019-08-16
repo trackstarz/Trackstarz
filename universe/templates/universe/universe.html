@@ -7,11 +7,16 @@
         {% include "blog/includes/homesidebarleft.html" %}
         </div>
         <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
-            <ul>
+            
             {% for user_p in users %}
-                <li><a href="{{ user_p.get_absolute_url }}">{{ user_p }}</a></li>
+                <div>
+                <ul class="universeimages">
+                <li><a href="{{ user_p.get_absolute_url }}"><img id="universe_image" src="{{MEDIA_URL}}{{ user_p.picture }}"></img></a></li>
+                <li><a href="{{ user_p.get_absolute_url }}">{{user_p}}</a></li>
+                </ul>
+                </div>
                 {% endfor %}
-            </ul>
+            
         </div>
 		
 	</div>
