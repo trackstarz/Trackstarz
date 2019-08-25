@@ -6,6 +6,8 @@ from userprofile.forms import UserForm, UserProfileForm
 
 from blog.models import Burst
 
+from userprofile.models import userprofile
+
 from django.template import RequestContext
 
 from django.contrib.auth import authenticate, login 
@@ -22,18 +24,30 @@ from django.views.decorators.csrf import csrf_protect
 
 from django.db.models import Count, Q
 
+from itertools import chain
+
+
 
 
 def search(request):
-    queryset = Burst.objects.all()
+    queryset = Burst.objects.all() 
+    
     query = request.GET.get('q')
+
     if query: 
         queryset = queryset.filter(
             Q(title__icontains=query) |
-            Q(bodytext__icontains=query)
+            Q(bodytext__icontains=query) |
+            Q(author__username__icontains=query) |
+            Q(author__first_name__icontains=query) |
+            Q(author__last_name__icontains=query) |
+            Q(author__email__icontains=query) |
+            Q(categories__title__icontains=query) |
+            Q(categories__description__icontains=query)
         ).distinct()
     context = {
-        'queryset': queryset
+        'queryset': queryset,
+        'query' : query
     }
     return render(request, 'userprofile/searchresults.html', context)
 
