@@ -38,3 +38,67 @@ class Burst(models.Model):
         
     def __str__(self):
         return self.bodytext[:60]
+
+    @property
+    def get_comments(self):
+        return self.comments.all().order_by('-timestamp')
+
+
+
+class Comment(models.Model):
+
+    burst = models.ForeignKey(Burst, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp  = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
+
+
+    def __str__(self):
+        return self.user.username
+
+    @property
+    def get_replies(self):
+        return self.replies.all().order_by('timestamp')
+
+
+class Reply(models.Model):
+
+    comment = models.ForeignKey(Comment, related_name='replies', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    from_user = models.ForeignKey(User, related_name='reply_from_user', on_delete=models.CASCADE, null=True, blank=True)
+    timestamp  = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
+
+
+    def __str__(self):
+        return self.user.username
+
+
+class BurstLike(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    burst = models.ForeignKey(Burst, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+
+
+class CommentLike(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+
+
+class ReplyLike(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reply = models.ForeignKey(Reply, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username

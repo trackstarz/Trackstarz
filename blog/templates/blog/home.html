@@ -29,7 +29,7 @@
                 {% for burst in burst|dictsortreversed:"timestamp" %}
                         {% if burst.author.userprofile.slug in friends_list or burst.trackstarz_article or burst.author == user %}
                                 <div class="burst">
-                                <h6><img id="burst_image" src="{{MEDIA_URL}}{{ burst.author.userprofile.picture }}"></img> <b>{{burst.author.userprofile.displayname}}</b>  <small><b>@{{ burst.author.username }}</b></small> <small>{{ burst.timestamp|timesince }} ago</small><a href="/"><i class="fa fa-ellipsis-h burstmenu"></i></a></h6>
+                                <h6><a class="prettylinks" href="{{ burst.author.userprofile.get_absolute_url }}"><img id="burst_image" src="{{MEDIA_URL}}{{ burst.author.userprofile.picture }}"></img></a> <a class="prettylinks" href="{{ burst.author.userprofile.get_absolute_url }}"><b>{{burst.author.userprofile.displayname}}</b></a>  <a class="prettylinks" href="{{ burst.author.userprofile.get_absolute_url }}"><small><b>@{{ burst.author.username }}</b></small></a> <small>{{ burst.timestamp|timesince }} ago</small><a href="/"><i class="fa fa-ellipsis-h burstmenu"></i></a></h6>
                                 {% if burst.title %}
                                 <h2>{{ burst.title }}</h2>
                                 {% endif %}
@@ -37,6 +37,60 @@
                                 {% if burst.picture %}
                                 <img src="{{MEDIA_URL}}{{burst.picture}}" width="100%"></img>
                                 {% endif %}
+                                <div class="burstinteractions">
+                                        <hr>
+                                        <h6> <a class="prettylinks" href="/"><i class="fa fa-heart"></i> like  </a>  &nbsp; &nbsp; <a class="prettylinks showComment" href="#" ><i class="fa fa-comment"></i> comment </a> &nbsp; &nbsp; <a class="prettylinks" href="/"><i class="fa fa-share"></i> share </a></h6>
+                                        <hr>
+                                        <div class="commentDIV" >
+                                                <form id="comment_form" method="POST" action="/" enctype="multipart/form-data">
+
+                                                        {% csrf_token %}
+                                                        <ul class="burst_inputs">
+                                                        <li>{{ comment_form.content }}<input type="hidden" name="burst" required id="id_burst" value="{{burst.id}}" /></li>
+                                                                <li> <input id="burst_submit" type="submit" name="submit" value="post" /></li>
+                                                        
+                                                        </ul>
+                                        
+                                                
+                                                </form>
+                                        </div>
+                                </div>
+                                <br/>
+                                {% for comment in burst.get_comments %}
+                                        <div class="comments">        
+                                                <h6><a class="prettylinks" href="{{ comment.user.userprofile.get_absolute_url }}"><img id="comment_image" src="{{MEDIA_URL}}{{ comment.user.userprofile.picture }}"></img></a> <a class="prettylinks" href="{{ comment.user.userprofile.get_absolute_url }}"><b>{{comment.user.userprofile.displayname}}</b></a>  <a class="prettylinks" href="{{ comment.user.userprofile.get_absolute_url }}"><small><b>@{{ comment.user.username }}</b></small></a> <small>{{ comment.timestamp|timesince }} ago</small></h6>
+                                                <div>{{ comment.content }}</div>
+                                                <h6> <small><a class="prettylinks" href="/"><i class="fa fa-heart"></i></a>  &nbsp; | &nbsp; <a class="prettylinks showReply" href="#" ><i class="fa fa-reply"></i></a></small></h6>
+                                                <br/>
+                                                
+                                                {% for reply in comment.get_replies %}
+                                                        <div class="reply">
+                                                                <h6><a class="prettylinks" href="{{ reply.user.userprofile.get_absolute_url }}"><img id="comment_image" src="{{MEDIA_URL}}{{ reply.user.userprofile.picture }}"></img></a> <a class="prettylinks" href="{{ reply.user.userprofile.get_absolute_url }}"><b>{{reply.user.userprofile.displayname}}</b></a>  <a class="prettylinks" href="{{ reply.user.userprofile.get_absolute_url }}"><small><b>@{{ reply.user.username }}</b></small></a> <small>{{ reply.timestamp|timesince }} ago</small></h6>
+                                                                <div>{% if reply.from_user and reply.from_user != reply.user %}<a class="prettylinks" href="{{ reply.from_user.userprofile.get_absolute_url }}"><small><b>@{{reply.from_user.username}}</b></small></a> {% endif %}{{ reply.content }}</div> 
+                                                                <h6> <small><a class="prettylinks" href="/"><i class="fa fa-heart"></i></a>  &nbsp; | &nbsp; <a class="prettylinks showReply" from_user="{{ reply.user.id }}" href="#"><i class="fa fa-reply"></i></a></small></h6>     
+                                                                <br/>
+                                                        </div>
+                                                        
+                                                        
+                                                        
+                                                {% endfor %}
+                                                <div class="reply replyDIV">
+                                                        <form id="reply_form" method="POST" action="/" enctype="multipart/form-data">
+                
+                                                                {% csrf_token %}
+                                                                <ul class="burst_inputs">
+                                                                        <li>{{ comment_form.content }}<input type="hidden" name="comment" required id="id_comment" value="{{comment.id}}" /></li>
+                                                                        <li> <input id="burst_submit" type="submit" name="submit" value="post" /></li>
+                                                                        
+                                                                </ul>
+                                                        
+                                                                
+                                                        </form>
+                                                        <br/>
+                                                </div>
+                                        </div>
+
+                                {% endfor %}
                                 </div>
                         {% endif %}
                 {% endfor %}
@@ -46,13 +100,24 @@
                 {% for burst in burst|dictsortreversed:"timestamp" %}
                         {% if burst.trackstarz_article %}
                                 <div class="burst">
-                                <h6><img id="burst_image" src="{{MEDIA_URL}}{{ burst.author.userprofile.picture }}"></img> <b>{{burst.author.userprofile.displayname}}</b>  <small><b>@{{ burst.author.username }}</b></small> <small>{{ burst.timestamp|timesince }} ago</small><a href="/"><i class="fa fa-ellipsis-h burstmenu"></i></a></h6>
+                                <h6><a class="prettylinks" href="{{ burst.author.userprofile.get_absolute_url }}"><img id="burst_image" src="{{MEDIA_URL}}{{ burst.author.userprofile.picture }}"></img></a> <a class="prettylinks" href="{{ burst.author.userprofile.get_absolute_url }}"><b>{{burst.author.userprofile.displayname}}</b></a>  <a class="prettylinks" href="{{ burst.author.userprofile.get_absolute_url }}"><small><b>@{{ burst.author.username }}</b></small></a> <small>{{ burst.timestamp|timesince }} ago</small><a href="/"><i class="fa fa-ellipsis-h burstmenu"></i></a></h6>
                                 {% if burst.title %}
                                 <h2>{{ burst.title }}</h2>
                                 {% endif %}
                                 <p>{{ burst.bodytext }}</p>
                                 {% if burst.picture %}
                                         <img src="{{MEDIA_URL}}{{burst.picture}}" width="100%"></img>
+                                {% endif %}
+                                {% if burst.get_comments %}
+                                <hr/>
+                                {% for comment in burst.get_comments %}
+                                        <h6><img id="comment_image" src="{{MEDIA_URL}}{{ comment.user.userprofile.picture }}"></img><b>{{comment.user.userprofile.displayname}}</b><small><b>@{{ comment.user.username }}</b></small></a> <small>{{ comment.timestamp|timesince }} ago</small></h6>
+                                        <div>{{ comment.content }}</div>
+                                        <br/>
+                                
+
+
+                                {% endfor %}
                                 {% endif %}
                                 </div>
                         {% endif %}

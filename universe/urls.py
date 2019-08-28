@@ -13,7 +13,7 @@ app_name = 'universe'
 
 urlpatterns = [
 	path('', universe_view, name='universe'),
-	re_path(r'^(?P<slug>[\w-]+)/$', universe_profile_view),
+	re_path(r'^(?P<slug>[\w-]+)/$', universe_profile_view, name='universe_profile_view'),
 	re_path(r'^friend-request/send/(?P<id>[\w-]+)/$', send_friend_request),
 	re_path(r'^friend-request/cancel/(?P<id>[\w-]+)/$', cancel_friend_request),
 	re_path(r'^friend-request/accept/(?P<id>[\w-]+)/$', accept_friend_request),

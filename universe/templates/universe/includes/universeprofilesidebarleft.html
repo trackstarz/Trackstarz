@@ -1,10 +1,10 @@
 <ul class="nav navbar-nav navbar-left">
         {% if user.is_authenticated %}
         <div class="info_pill">
-        <li><img class="rounded" src="{{MEDIA_URL}}{{picture}}" width="100%" height="auto" /></li>
+        <li><a class="prettylinks" href="{{ absolute_url }}"><img class="rounded" src="{{MEDIA_URL}}{{picture}}" width="100%" height="auto" /></a></li>
         
-        <h4 class="nudgedown">{{displayname}}</h4>
-        <h6>@{{ username }}</h6>
+        <h4 class="nudgedown"><a class="prettylinks" href="{{ absolute_url }}">{{displayname}}</a></h4>
+        <h6><a class="prettylinks" href="{{ absolute_url }}">@{{ username }}</a></h6>
         {% if request.user == u %}
         {% else %}
 

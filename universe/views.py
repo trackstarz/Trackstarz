@@ -4,7 +4,7 @@ from django.contrib import messages
 
 from django.http import HttpResponseRedirect
 
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 
 from django.views.generic import ListView
 
@@ -18,9 +18,9 @@ from universe.models import friendrequest
 
 from django.contrib.auth import get_user_model
 
-from blog.forms import UserForm, BurstForm
+from blog.forms import UserForm, BurstForm, CommentForm
 
-from blog.models import Burst
+from blog.models import Burst, Comment
 
 
 
@@ -50,6 +50,7 @@ def universe_profile_view(request, slug):
     picture = p.picture
     displayname = p.displayname
     username = u.username
+    absolute_url = p.get_absolute_url
     sent_friend_requests = friendrequest.objects.filter(from_user=p.user)
     rec_friend_requests = friendrequest.objects.filter(to_user=p.user)
 
@@ -66,6 +67,21 @@ def universe_profile_view(request, slug):
 
     entries = Burst.objects.all()
 
+    if request.method == "POST":
+        comment_form = CommentForm(request.POST or None)
+        if comment_form.is_valid():
+            comment_form.instance.user = request.user
+            comment_form.save()
+            myslug = '/universe/' + slug
+            return redirect(myslug)
+        else:
+            print (comment_form.errors)
+    
+    else:
+        comment_form = CommentForm()
+
+
+
     context = {
         'u': u,
         'button_status': button_status,
@@ -78,7 +94,9 @@ def universe_profile_view(request, slug):
         'cover': cover,
         'picture': picture,
         'displayname': displayname,
-        'username': username
+        'username': username,
+        'absolute_url': absolute_url,
+        'comment_form' : comment_form
     }
     return render(request, "universe/universeprofile.html", context)
 

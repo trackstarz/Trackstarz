@@ -43,7 +43,8 @@ def search(request):
             Q(author__last_name__icontains=query) |
             Q(author__email__icontains=query) |
             Q(categories__title__icontains=query) |
-            Q(categories__description__icontains=query)
+            Q(categories__description__icontains=query) |
+            Q(comments__content__icontains=query)
         ).distinct()
     context = {
         'queryset': queryset,

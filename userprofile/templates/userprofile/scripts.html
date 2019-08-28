@@ -26,6 +26,48 @@
 </script>
 
 
+<!-- This section is for revealing the comment section on bursts 
+<script>
+function showComment() {
+	var x = document.getElementById("commentDIV");
+	if (x.style.display && x.style.display !== "none") {
+	  x.style.display = "none";
+	} else {
+	  x.style.display = "block";
+	}
+  }
+</script>
+-->
+<script>
+	$(document).ready(function() {
+		$('.showComment').click(function() {
+			$(this).closest('.burstinteractions').find('.commentDIV').toggle();
+
+		});
+		
+	});
+</script>
+
+<script>
+	$(document).ready(function() {
+		$('.showReply').click(function() {
+			$(this).closest('.comments').find('.replyDIV').toggle();
+			var from_user = $(this).attr("from_user");
+			if ( from_user ) {
+				$(this).closest('.comments').find(".appended").remove();
+				$(this).closest('.comments').find('#reply_form').append("<input class='appended' type='hidden' name='from_user' required id='id_from_user' value='" + from_user + "' />");
+				
+			} else {
+				$(this).closest('.comments').find(".appended").remove();
+				
+			}
+		});
+		
+		});
+</script>
+
+
+
 
 <!-- This section is for the buttons in the updage burst section -->
 <script>
