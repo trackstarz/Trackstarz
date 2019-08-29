@@ -43,6 +43,10 @@ class Burst(models.Model):
     def get_comments(self):
         return self.comments.all().order_by('-timestamp')
 
+    @property
+    def get_likers(self):
+        return self.burstlikes.all().values_list('user', flat=True)
+
 
 
 class Comment(models.Model):
@@ -60,6 +64,11 @@ class Comment(models.Model):
     def get_replies(self):
         return self.replies.all().order_by('timestamp')
 
+    @property
+    def get_likers(self):
+        return self.commentlikes.all().values_list('user', flat=True)
+
+
 
 class Reply(models.Model):
 
@@ -73,11 +82,15 @@ class Reply(models.Model):
     def __str__(self):
         return self.user.username
 
+    @property
+    def get_likers(self):
+        return self.replylikes.all().values_list('user', flat=True)
+
 
 class BurstLike(models.Model):
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    burst = models.ForeignKey(Burst, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='burstlikers', on_delete=models.CASCADE)
+    burst = models.ForeignKey(Burst, related_name='burstlikes', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -86,8 +99,8 @@ class BurstLike(models.Model):
 
 class CommentLike(models.Model):
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='commentlikers', on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, related_name='commentlikes', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -96,8 +109,8 @@ class CommentLike(models.Model):
 
 class ReplyLike(models.Model):
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    reply = models.ForeignKey(Reply, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='replylikers', on_delete=models.CASCADE)
+    reply = models.ForeignKey(Reply, related_name='replylikes', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

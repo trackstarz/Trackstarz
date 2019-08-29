@@ -1,12 +1,12 @@
 from django.shortcuts import render_to_response
 
-from django.shortcuts import render,  redirect
+from django.shortcuts import render,  redirect, get_object_or_404
 
 from django.template import RequestContext
 
-from blog.models import Burst
+from blog.models import Burst, BurstLike, CommentLike, ReplyLike
 
-from blog.forms import UserForm, BurstForm, CommentForm, ReplyForm
+from blog.forms import UserForm, BurstForm, CommentForm, ReplyForm, BurstLikeForm, CommentLikeForm, ReplyLikeForm
 
 from django.http import HttpResponseRedirect, HttpResponse
 
@@ -28,6 +28,15 @@ from userprofile.models import userprofile
 def home(request):
     context = RequestContext(request)
     entries = Burst.objects.all()[:100]
+    
+    global myburst
+    global myid
+    global is_liked
+    
+    
+
+
+
     if request.user.is_authenticated:
         p = request.user.userprofile
         friends = p.friends.all().values_list('slug', flat=True)
@@ -36,9 +45,12 @@ def home(request):
    
 
     if request.method == "POST":
-        burst_form = BurstForm(data=request.POST) # Attempt to grab information from the raw form information.
+        burst_form = BurstForm(request.POST or None) # Attempt to grab information from the raw form information.
         comment_form = CommentForm(request.POST or None)
         reply_form = ReplyForm(request.POST or None)
+        burstlike_form = BurstLikeForm(request.POST or None)
+        commentlike_form = CommentLikeForm(request.POST or None)
+        replylike_form = ReplyLikeForm(request.POST or None)
 
         if burst_form.is_valid():
             burst = burst_form.save(commit=False)
@@ -67,15 +79,63 @@ def home(request):
         else:
             print (reply_form.errors)
 
+        
+        if burstlike_form.is_valid():
+            burstlikes = BurstLike.objects.all()
+            myburst = burstlike_form.save(commit=False)
+            burstlike_form.instance.user = request.user
+
+            if burstlikes.filter(burst=myburst.burst).exists() and burstlikes.filter(user=myburst.user).exists():
+                burstlikes.filter(burst=myburst.burst, user=myburst.user).first().delete()
+            else:
+                burstlike_form.save()
+                return redirect("/")
+        else:
+            print (burstlike_form.errors)
+
+
+        if commentlike_form.is_valid():
+            commentlikes = CommentLike.objects.all()
+            mycomment = commentlike_form.save(commit=False)
+            commentlike_form.instance.user = request.user
+
+            if commentlikes.filter(comment=mycomment.comment).exists() and commentlikes.filter(user=mycomment.user).exists():
+                commentlikes.filter(comment=mycomment.comment, user=mycomment.user).first().delete()
+            else:
+                commentlike_form.save()
+                return redirect("/")
+        else:
+            print (commentlike_form.errors)
+
+
+
+        if replylike_form.is_valid():
+            replylikes = ReplyLike.objects.all()
+            myreply = replylike_form.save(commit=False)
+            replylike_form.instance.user = request.user
+
+            if replylikes.filter(reply=myreply.reply).exists() and replylikes.filter(user=myreply.user).exists():
+                replylikes.filter(reply=myreply.reply, user=myreply.user).first().delete()
+            else:
+                replylike_form.save()
+                return redirect("/")
+        else:
+            print (replylike_form.errors)
+
+        
+
 
     else:
         burst_form = BurstForm()
         comment_form = CommentForm()
         reply_form = ReplyForm()
+        burstlike_form = BurstLikeForm()
+        commentlike_form = CommentLikeForm()
+        replylike_form = ReplyLikeForm()
         
 
 
-    return render(request, 'blog/home.html', {'burst' : entries, 'burst_form' : burst_form, 'friends_list': friends, 'comment_form' : comment_form, 'reply_form' : reply_form} )
+    return render(request, 'blog/home.html', {'burst' : entries, 'burst_form' : burst_form, 'friends_list': friends, 'comment_form' : comment_form, 'reply_form' : reply_form, 'burstlike_form' : burstlike_form, 'commentlike_form' : commentlike_form, 'replylike_form' : replylike_form} )
 
 
 

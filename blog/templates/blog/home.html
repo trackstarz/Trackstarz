@@ -39,7 +39,22 @@
                                 {% endif %}
                                 <div class="burstinteractions">
                                         <hr>
-                                        <h6> <a class="prettylinks" href="/"><i class="fa fa-heart"></i> like  </a>  &nbsp; &nbsp; <a class="prettylinks showComment" href="#" ><i class="fa fa-comment"></i> comment </a> &nbsp; &nbsp; <a class="prettylinks" href="/"><i class="fa fa-share"></i> share </a></h6>
+                                        <h6>
+                                                <form id="burstlike_form" method="POST" action="#"  enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="burst" required id ="id_burst" value="{{burst.id}}" />
+                                                        <input type="hidden" name="user" required id ="id_user" value="{{request.user}}" />
+                                                        {% if request.user.id in burst.get_likers %}
+                                                        <button type='submit' id="submit" name="submit" class="dislikebutton"><i class="fa fa-heart"></i> liked</button>
+                                                        {% else %}
+                                                        <button type='submit' id="submit" name="submit" class="likebutton"><i class="fa fa-heart"></i> like</button>
+                                                        {% endif %}
+                                                </form>
+                                                &nbsp; &nbsp; 
+                                                <a class="prettylinks showComment" href="#" ><i class="fa fa-comment"></i> comment </a> 
+                                                &nbsp; &nbsp; 
+                                                <a class="prettylinks" href="/"><i class="fa fa-share"></i> share </a>
+                                        </h6>
                                         <hr>
                                         <div class="commentDIV" >
                                                 <form id="comment_form" method="POST" action="/" enctype="multipart/form-data">
@@ -58,16 +73,47 @@
                                 <br/>
                                 {% for comment in burst.get_comments %}
                                         <div class="comments">        
-                                                <h6><a class="prettylinks" href="{{ comment.user.userprofile.get_absolute_url }}"><img id="comment_image" src="{{MEDIA_URL}}{{ comment.user.userprofile.picture }}"></img></a> <a class="prettylinks" href="{{ comment.user.userprofile.get_absolute_url }}"><b>{{comment.user.userprofile.displayname}}</b></a>  <a class="prettylinks" href="{{ comment.user.userprofile.get_absolute_url }}"><small><b>@{{ comment.user.username }}</b></small></a> <small>{{ comment.timestamp|timesince }} ago</small></h6>
+                                                <h6>
+                                                        <a class="prettylinks" href="{{ comment.user.userprofile.get_absolute_url }}"><img id="comment_image" src="{{MEDIA_URL}}{{ comment.user.userprofile.picture }}"></img></a> <a class="prettylinks" href="{{ comment.user.userprofile.get_absolute_url }}"><b>{{comment.user.userprofile.displayname}}</b></a>  <a class="prettylinks" href="{{ comment.user.userprofile.get_absolute_url }}"><small><b>@{{ comment.user.username }}</b></small></a> <small>{{ comment.timestamp|timesince }} ago</small></h6>
                                                 <div>{{ comment.content }}</div>
-                                                <h6> <small><a class="prettylinks" href="/"><i class="fa fa-heart"></i></a>  &nbsp; | &nbsp; <a class="prettylinks showReply" href="#" ><i class="fa fa-reply"></i></a></small></h6>
+                                                <h6> 
+                                                        <small>
+                                                                <form id="commentlike_form" method="POST" action="#"  enctype="multipart/form-data">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="comment" required id ="id_comment" value="{{comment.id}}" />
+                                                                        <input type="hidden" name="user" required id ="id_user" value="{{request.user}}" />
+                                                                        {% if request.user.id in comment.get_likers %}
+                                                                        <button type='submit' id="submit" name="submit" class="dislikebutton"><i class="fa fa-heart"></i></button>
+                                                                        {% else %}
+                                                                        <button type='submit' id="submit" name="submit" class="likebutton"><i class="fa fa-heart"></i></button>
+                                                                        {% endif %}
+                                                                </form>  
+                                                                &nbsp; | &nbsp; 
+                                                                <a class="prettylinks showReply" href="#" ><i class="fa fa-reply"></i></a>
+                                                        </small>
+                                                </h6>
                                                 <br/>
                                                 
                                                 {% for reply in comment.get_replies %}
                                                         <div class="reply">
                                                                 <h6><a class="prettylinks" href="{{ reply.user.userprofile.get_absolute_url }}"><img id="comment_image" src="{{MEDIA_URL}}{{ reply.user.userprofile.picture }}"></img></a> <a class="prettylinks" href="{{ reply.user.userprofile.get_absolute_url }}"><b>{{reply.user.userprofile.displayname}}</b></a>  <a class="prettylinks" href="{{ reply.user.userprofile.get_absolute_url }}"><small><b>@{{ reply.user.username }}</b></small></a> <small>{{ reply.timestamp|timesince }} ago</small></h6>
                                                                 <div>{% if reply.from_user and reply.from_user != reply.user %}<a class="prettylinks" href="{{ reply.from_user.userprofile.get_absolute_url }}"><small><b>@{{reply.from_user.username}}</b></small></a> {% endif %}{{ reply.content }}</div> 
-                                                                <h6> <small><a class="prettylinks" href="/"><i class="fa fa-heart"></i></a>  &nbsp; | &nbsp; <a class="prettylinks showReply" from_user="{{ reply.user.id }}" href="#"><i class="fa fa-reply"></i></a></small></h6>     
+                                                                <h6> 
+                                                                        <small>
+                                                                                <form id="replylike_form" method="POST" action="#"  enctype="multipart/form-data">
+                                                                                        {% csrf_token %}
+                                                                                        <input type="hidden" name="reply" required id ="id_reply" value="{{reply.id}}" />
+                                                                                        <input type="hidden" name="user" required id ="id_user" value="{{request.user}}" />
+                                                                                        {% if request.user.id in reply.get_likers %}
+                                                                                        <button type='submit' id="submit" name="submit" class="dislikebutton"><i class="fa fa-heart"></i></button>
+                                                                                        {% else %}
+                                                                                        <button type='submit' id="submit" name="submit" class="likebutton"><i class="fa fa-heart"></i></button>
+                                                                                        {% endif %}
+                                                                                </form>  
+                                                                                &nbsp; | &nbsp; 
+                                                                                <a class="prettylinks showReply" from_user="{{ reply.user.id }}" href="#"><i class="fa fa-reply"></i></a>
+                                                                        </small>
+                                                                </h6>     
                                                                 <br/>
                                                         </div>
                                                         

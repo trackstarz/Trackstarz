@@ -1,4 +1,4 @@
-from blog.models import Burst, Comment, Reply
+from blog.models import Burst, Comment, Reply, BurstLike, CommentLike, ReplyLike
 from django.contrib.auth.models import User
 from django import forms
 
@@ -39,3 +39,21 @@ class ReplyForm(forms.ModelForm):
     class Meta:
         model = Reply
         fields = ('content', 'comment', 'from_user' )
+
+
+class BurstLikeForm(forms.ModelForm):
+    class Meta:
+        model = BurstLike
+        fields = ('burst',)
+
+
+class CommentLikeForm(forms.ModelForm):
+    class Meta:
+        model = CommentLike
+        fields = ('comment',)
+
+
+class ReplyLikeForm(forms.ModelForm):
+    class Meta:
+        model = ReplyLike
+        fields = ('reply',)
