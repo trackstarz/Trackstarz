@@ -1,6 +1,4 @@
-from django.shortcuts import render_to_response
-
-from django.shortcuts import render,  redirect, get_object_or_404
+from django.shortcuts import render, render_to_response, redirect, get_object_or_404
 
 from django.template import RequestContext
 
@@ -22,6 +20,14 @@ from django.utils import timezone
 
 from userprofile.models import userprofile
 
+from rest_framework import viewsets
+
+from blog.serializers import BurstSerializer
+
+
+class BurstView(viewsets.ModelViewSet):
+    serializer_class = BurstSerializer
+    queryset = Burst.objects.all()
 
 
 

@@ -26,6 +26,10 @@ from django.db.models import Count, Q
 
 from itertools import chain
 
+from userprofile.serializers import userprofileSerializer
+
+from rest_framework import viewsets
+
 
 
 
@@ -121,6 +125,7 @@ def register(request):
 def user_login(request):
     # Like before, obtain the context for the user's request.
     context = RequestContext(request)
+    serializer_class = userprofileSerializer
 
     # If the request is a HTTP POST, try to pull out the relevant information.
     if request.method == 'POST':

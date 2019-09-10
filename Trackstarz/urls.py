@@ -24,6 +24,10 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 from wagtail.core import urls as wagtail_urls
 from django.conf.urls.static import static
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'bursts', blog_views.BurstView, 'burst')
 
 urlpatterns = [
 	path('admin/', admin.site.urls),
@@ -40,5 +44,6 @@ urlpatterns = [
 	re_path(r'^pages/', include(wagtail_urls)),
 	path('memberships/', include('memberships.urls', namespace='memberships')),
 	path('universe/', include('universe.urls', namespace='universe')),
+	path('api/', include(router.urls)),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

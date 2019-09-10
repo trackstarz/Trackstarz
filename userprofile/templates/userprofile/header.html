@@ -13,15 +13,15 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse text-uppercase" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="active nav-item">
+        <li class="{% if request.resolver_match.view_name == 'home' %}active{% endif %} nav-item">
           <a href="/" class="nav-link">
             Home
           <span class="sr-only">(current)</span>
           </a>
         </li>
         <li class="nav-item"><a href="#" class="nav-link">About</a></li>
-        <li class="dropdown nav-item">
-          <a href="/universe/" class="dropdown-toggle nav-link" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Universe <span class="caret"></span></a>
+        <li class="dropdown nav-item ">
+          <a href="/universe/" class="dropdown-toggle nav-link {% if request.resolver_match.view_name == 'universe:universe' or request.resolver_match.view_name == 'universe:universe_profile_view' %}active{% endif %}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Universe <span class="caret"></span></a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropbdown">
             <li class="dropdown-submenu">
               <a href="#" class="dropdown-item dropdown-toggle" role="button"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shows</a>
@@ -85,7 +85,7 @@
             </a>
           </li>
           <li class="dropdown nav-item nudgedown">
-              <a class="dropdown-toggle nav-link" href="/memberships/profile" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{user.get_short_name}}<span class="caret"></span>
+              <a class="dropdown-toggle nav-link {% if request.resolver_match.view_name == 'memberships:profile' or request.resolver_match.view_name == 'memberships:select' %}active{% endif %}" href="/memberships/profile" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{user.get_short_name}}<span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
                 <li><a href="/memberships/profile" class="dropdown-item">Profile</a></li>
