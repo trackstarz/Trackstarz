@@ -1,0 +1,49 @@
+{% extends 'userprofile/base.html' %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        {% include "blog/includes/homesidebarleft.html" %}
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+
+
+            {% if request.user == u %}
+
+            <h1>Friends</h1>
+            <ul>
+            {% for friend in friends_list %}
+                <li><a href="{{ friend.user.userprofile.get_absolute_url }}">{{ friend.user.username }}</a></li>
+            {% endfor %}
+            </ul>
+            <hr>
+            <h2>Sent Friend requests</h2>
+            <ul>
+            {% for s_request in sent_friend_requests %}
+                <li><a href="{{ s_request.to_user.userprofile.get_absolute_url }}">{{ s_request.to_user.username }}</a></li>
+            {% endfor %}
+            </ul>
+            <hr>
+            <h2>Recieved Friend Requests</h2>
+            {% for r_request in rec_friend_requests %}
+                <p><a href="{{ r_request.from_user.userprofile.get_absolute_url }}">{{ r_request.from_user.username }}</a></p>
+                <small><a class='btn btn-primary' href="/memberships/universe/friend-request/accept/{{ r_request.from_user.id }}">Accept</a></small></small>
+                <small><a class='btn btn-primary' href="/memberships/universe/friend-request/delete/{{ r_request.from_user.id }}">Ignore</a></small></small>
+            {% endfor %}
+
+            {% else %}
+
+            {% if button_status == 'not_friend' %}
+                <small><a class='btn btn-primary' href="/memberships/universe/friend-request/send/{{ u.id }}">Add Friend</a></small>
+            {% elif button_status == 'friend_request_sent' %}
+                <small><a class='btn btn-primary' href="/memberships/universe/friend-request/cancel/{{ u.id }}">Cancel Request</a></small>
+            {% endif %}
+            
+            {% endif %}
+
+        </div>
+		
+	</div>
+</div>
+{% endblock content %}

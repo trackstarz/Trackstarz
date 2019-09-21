@@ -1,0 +1,49 @@
+<div class="info_pill">
+    <h4 class="center-text nudgedown">FRIENDS</h4>
+            
+    {% for friend in friends_list %}
+        <div>
+            <ul class="universeimages">
+                <li><a href="{{ friend.user.userprofile.get_absolute_url }}"><img id="universe_image" src="{{MEDIA_URL}}{{ friend.user.userprofile.picture }}"></img></a></li>
+                <li><a href="{{ friend.user.userprofile.get_absolute_url }}">{{ friend.user.username }}</a></li>
+            </ul>
+        </div>
+    {% endfor %}
+
+    <p class="clearfix"></p>
+</div>
+
+<div class="info_pill">
+    <h4 class="center-text nudgedown">SENT REQUESTS</h4>   
+
+    
+    {% for s_request in sent_friend_requests %}
+    <div>
+        <ul class="universeimages">
+            <li><a href="{{ s_request.to_user.userprofile.get_absolute_url }}"><img id="universe_image" src="{{MEDIA_URL}}{{ s_request.to_user.userprofile.picture }}"></img></a></li>
+            <li><a href="{{ s_request.to_user.userprofile.get_absolute_url }}">{{ s_request.to_user.username }}</a></li>
+        </ul>
+    </div>
+    {% endfor %}
+    <p class="clearfix"></p>
+</div>
+
+<div class="info_pill">
+    <h4 class="center-text nudgedown">RECEIVED REQUESTS</h4> 
+    
+    {% for r_request in rec_friend_requests %}
+    <div>
+        <ul class="universeimages">
+            <li><a href="{{ r_request.from_user.userprofile.get_absolute_url }}"><img id="universe_image" src="{{MEDIA_URL}}{{ r_request.from_user.userprofile.picture }}"></img></a></li>
+            <li><a href="{{ r_request.from_user.userprofile.get_absolute_url }}">{{ r_request.from_user.username }}</a></li>
+            <li class="acceptbutton"><a class='btn btn-primary' href="/universe/friend-request/accept/{{ r_request.from_user.id }}">Accept</a></li>
+            <li><small><a class='btn btn-primary' href="/universe/friend-request/delete/{{ r_request.from_user.id }}">Ignore</a></small></li>
+        </ul>
+    </div>
+    <br/><br/>
+    {% endfor %}
+    <p class="clearfix"></p>
+</div>
+            
+            
+            

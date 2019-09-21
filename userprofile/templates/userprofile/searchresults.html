@@ -1,0 +1,48 @@
+{% extends "userprofile/base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3"></div>
+    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+        <h2>Search results for "{{query}}"</h2>
+        
+        </br>
+        {% if user.is_authenticated %}
+        {% for result in queryset|dictsortreversed:"timestamp" %}
+        {% if result.author.userprofile.slug in friends_list or result.trackstarz_article or result.author == user %}
+            <div class="burst">
+            <h6><a class="prettylinks" href="{{ result.author.userprofile.get_absolute_url }}"><img id="burst_image" src="{{MEDIA_URL}}{{ result.author.userprofile.picture }}"></img></a> <a class="prettylinks" href="{{ result.author.userprofile.get_absolute_url }}"><b>{{result.author.userprofile.displayname}}</b></a>  <a class="prettylinks" href="{{ result.author.userprofile.get_absolute_url }}"><small><b>@{{ result.author.username }}</b></small></a> <small>{{ result.timestamp|timesince }} ago</small><a href="/"><i class="fa fa-ellipsis-h burstmenu"></i></a></h6>
+            {% if result.title %}
+            <h4>{{ result.title }}</h4>
+            {% endif %}
+            <p>{{ result.bodytext }}</p>
+            {% if result.picture %}
+                <a href="{{MEDIA_URL}}{{ result.picture }}" }}><img width="100%" src="{{MEDIA_URL}}{{ result.picture }}"></img></a>
+            {% endif %}
+            </div>
+        {% endif %}
+        {% endfor %}
+
+        {% else %}
+        {% for result in queryset|dictsortreversed:"timestamp" %}
+        {% if result.trackstarz_article %}
+            <div class="burst">
+            <h6><a class="prettylinks" href="{{ result.author.userprofile.get_absolute_url }}"><img id="burst_image" src="{{MEDIA_URL}}{{ result.author.userprofile.picture }}"></img></a> <a class="prettylinks" href="{{ result.author.userprofile.get_absolute_url }}"><b>{{result.author.userprofile.displayname}}</b></a>  <a class="prettylinks" href="{{ result.author.userprofile.get_absolute_url }}"><small><b>@{{ result.author.username }}</b></small></a> <small>{{ result.timestamp|timesince }} ago</small><a href="/"><i class="fa fa-ellipsis-h burstmenu"></i></a></h6>
+            {% if result.title %}
+            <h4>{{ result.title }}</h4>
+            {% endif %}
+            <p>{{ result.bodytext }}</p>
+            {% if result.picture %}
+                <a href="{{MEDIA_URL}}{{ result.picture }}" }}><img width="100%" src="{{MEDIA_URL}}{{ result.picture }}"></img></a>
+            {% endif %}
+            </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+    </div>
+    </div>
+</div>
+
+{% endblock %}

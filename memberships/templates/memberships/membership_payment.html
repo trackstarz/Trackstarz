@@ -1,0 +1,54 @@
+{% extends 'userprofile/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+
+
+<div class="container">
+	<div class="row">
+		<h1>Payment</h2>
+		<div class="col-sm-12 col-md-12">
+      <p>Selected membership: {{ selected_membership }}</p>
+      <p>Price: <strong>${{ selected_membership.price }}</strong><small>/month</p>
+      
+      <script src="https://js.stripe.com/v3/"></script>
+
+      <form action="." method="post" id="payment-form">
+        {% csrf_token %}
+          
+            <label for="card-element">
+              Credit or debit card
+            </label> 
+            <div class="form-row">
+            <div id="card-element" style="width:30em; margin-top:28px;">
+              
+            </div>
+          
+            <!-- Used to display form errors. -->
+            <div id="card-errors" role="alert"></div> 
+          
+          <button class="stripe">Submit Payment</button>
+        </div>
+      </form>
+  
+    </div>
+  </div>
+
+
+ <div id="stripe-token-handler" class="is-hidden">Success! Got token: <span class="token"></span></div>
+
+		
+</div>
+	
+
+<!-- script for the stripe form -->
+
+<script src="{% static 'js/checkout.js' %}"></script>
+
+
+
+
+
+{% endblock content %}
