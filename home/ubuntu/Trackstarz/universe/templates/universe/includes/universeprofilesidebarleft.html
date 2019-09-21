@@ -1,0 +1,28 @@
+<ul class="nav navbar-nav navbar-left">
+        {% if user.is_authenticated %}
+        <div class="info_pill">
+        <li><a class="prettylinks" href="{{ absolute_url }}"><img class="rounded" src="{{MEDIA_URL}}{{picture}}" width="100%" height="auto" /></a></li>
+        
+        <h4 class="nudgedown"><a class="prettylinks" href="{{ absolute_url }}">{{displayname}}</a></h4>
+        <h6><a class="prettylinks" href="{{ absolute_url }}">@{{ username }}</a></h6>
+        {% if request.user == u %}
+        {% else %}
+
+                {% if button_status == 'not_friend' %}
+                    <small><a class='btn btn-primary' href="/universe/friend-request/send/{{ u.id }}">Add Friend</a></small>
+                {% elif button_status == 'friend_request_sent' %}
+                    <small><a class='btn btn-primary' href="/universe/friend-request/cancel/{{ u.id }}">Cancel Request</a></small>
+                {% endif %}
+        {% endif %}
+        </div>
+
+        <br/>
+        <p class="sidebarmenu"><a href="/universe/{{request.user.userprofile.slug}}"><i class="fa fa-home" aria-hidden="true"></i> HOME</a></p>
+        <p class="sidebarmenu"><a href="/universe/"><i class="fa fa-globe" aria-hidden="true"></i> UNIVERSE</a></p>
+
+	{% else %}
+        <div class="info_pill">
+                <h6>Welcome to the Trackstarz Universe!</h6>
+        </div>
+	{% endif %}
+
