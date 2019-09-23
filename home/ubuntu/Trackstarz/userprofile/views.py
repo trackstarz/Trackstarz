@@ -26,15 +26,21 @@ from django.db.models import Count, Q
 
 from itertools import chain
 
-from userprofile.serializers import userprofileSerializer
+from userprofile.serializers import userprofileSerializer, userSerializer
 
 from rest_framework import viewsets
+
+from django.contrib.auth.models import User
 
 
 
 class UserprofileView(viewsets.ModelViewSet):
     serializer_class = userprofileSerializer
     queryset = userprofile.objects.all()
+
+class UserView(viewsets.ModelViewSet):
+    serializer_class = userSerializer
+    queryset = User.objects.all()
 
 
 
