@@ -68,15 +68,17 @@ class BurstList extends React.Component {
                         btnText="post"/>
                 </div>
                     <Bursts data={this.state.bursts}/>
-                    <div key={this.state.bursts.id}>
+                    <div >
                             {this.state.bursts.map(burst => (
                                 <div style={{ marginBottom: 10, borderRadius: 5, padding: 10, background: '#fff'}}>
-                                { this.state.userprofiles.filter(author => (burst.author === author.user)).map(author => 
-                                <div> 
-                                <h4><img src={ author.picture } style={{ objectFit: "cover", objectPosition: "50% 0", width: 40, height: 40, borderRadius: "50%"}} /> <b>{author.displayname}</b> <small><b>{author.username}</b></small> <small> {burst.timestamp}</small></h4></div> )
-                                   
-                                     } 
-                                { burst.author.username } { burst.author.picture }
+                                
+                                { burst.author != null &&
+                                <div>
+                                <img src={ burst.author.picture } style={{ objectFit: "cover", objectPosition: "50% 0", width: 40, height: 40, borderRadius: "50%"}} /> 
+                                
+                                <b>  {burst.author.displayname}</b> <small><b>@{burst.author.user.username}</b></small> <small> {burst.timestamp}</small>
+                                </div>
+                                }
                                 { burst.title != null &&
                                 <h2>{burst.title}</h2>
                                 }

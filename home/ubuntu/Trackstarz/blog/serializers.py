@@ -21,7 +21,7 @@ class BurstSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     burst = BurstSerializer()
-    userprofile = userprofileSerializer()
+    author = userprofileSerializer()
     class Meta:
         model = Comment
         fields = '__all__'

@@ -46,7 +46,7 @@ class Burst(models.Model):
 
     @property
     def get_likers(self):
-        return self.burstlikes.all().values_list('userprofile', flat=True)
+        return self.burstlikes.all().values_list('author', flat=True)
 
 
 
@@ -67,7 +67,7 @@ class Comment(models.Model):
  
     @property
     def get_likers(self):
-        return self.commentlikes.all().values_list('userprofile', flat=True)
+        return self.commentlikes.all().values_list('author', flat=True)
 
 
 
@@ -85,7 +85,7 @@ class Reply(models.Model):
 
     @property
     def get_likers(self):
-        return self.replylikes.all().values_list('userprofile', flat=True)
+        return self.replylikes.all().values_list('author', flat=True)
 
 
 class BurstLike(models.Model):

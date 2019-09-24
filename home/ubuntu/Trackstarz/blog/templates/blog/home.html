@@ -27,9 +27,9 @@
 
         {% if user.is_authenticated %}
                 {% for burst in burst|dictsortreversed:"timestamp" %}
-                        {% if burst.author.userprofile.slug in friends_list or burst.trackstarz_article or burst.author == user %}
+                        {% if burst.author.slug in friends_list or burst.trackstarz_article or burst.author.user == user %}
                                 <div class="burst">
-                                <h6><a class="prettylinks" href="{{ burst.author.userprofile.get_absolute_url }}"><img id="burst_image" src="{{MEDIA_URL}}{{ burst.author.userprofile.picture }}"></img></a> <a class="prettylinks" href="{{ burst.author.userprofile.get_absolute_url }}"><b>{{burst.author.userprofile.displayname}}</b></a>  <a class="prettylinks" href="{{ burst.author.userprofile.get_absolute_url }}"><small><b>@{{ burst.author.username }}</b></small></a> <small>{{ burst.timestamp|timesince }} ago</small><a href="/"><i class="fa fa-ellipsis-h burstmenu"></i></a></h6>
+                                <h6><a class="prettylinks" href="{{ burst.author.get_absolute_url }}"><img id="burst_image" src="{{MEDIA_URL}}{{ burst.author.picture }}"></img></a> <a class="prettylinks" href="{{ burst.author.get_absolute_url }}"><b>{{burst.author.displayname}}</b></a>  <a class="prettylinks" href="{{ burst.author.get_absolute_url }}"><small><b>@{{ burst.author.user.username }}</b></small></a> <small>{{ burst.timestamp|timesince }} ago</small><a href="/"><i class="fa fa-ellipsis-h burstmenu"></i></a></h6>
                                 {% if burst.title %}
                                 <h2>{{ burst.title }}</h2>
                                 {% endif %}
@@ -46,8 +46,8 @@
                                                 <form id="burstlike_form" class="inlineform" method="POST" action="#"  enctype="multipart/form-data">
                                                         {% csrf_token %}
                                                         <input type="hidden" name="burst" required id ="id_burst" value="{{burst.id}}" />
-                                                        <input type="hidden" name="user" required id ="id_user" value="{{request.user}}" />
-                                                        {% if request.user.id in burst.get_likers %}
+                                                        <input type="hidden" name="author" required id ="id_author" value="{{request.user.userprofile}}" />
+                                                        {% if request.userprofile.id in burst.get_likers %}
                                                         <button type='submit' id="submit" name="submit" class="dislikebutton"><i class="fa fa-heart"></i> liked</button>
                                                         {% else %}
                                                         <button type='submit' id="submit" name="submit" class="likebutton"><i class="fa fa-heart"></i> like</button>
@@ -78,15 +78,15 @@
                                 {% for comment in burst.get_comments %}
                                         <div class="comments">        
                                                 <h6> 
-                                                        <a class="prettylinks" href="{{ comment.user.userprofile.get_absolute_url }}"><img id="comment_image" src="{{MEDIA_URL}}{{ comment.user.userprofile.picture }}"></img></a> <a class="prettylinks" href="{{ comment.user.userprofile.get_absolute_url }}"><b>{{comment.user.userprofile.displayname}}</b></a>  <a class="prettylinks" href="{{ comment.user.userprofile.get_absolute_url }}"><small><b>@{{ comment.user.username }}</b></small></a> <small>{{ comment.timestamp|timesince }} ago</small></h6>
+                                                        <a class="prettylinks" href="{{ comment.author.get_absolute_url }}"><img id="comment_image" src="{{MEDIA_URL}}{{ comment.author.picture }}"></img></a> <a class="prettylinks" href="{{ comment.author.get_absolute_url }}"><b>{{comment.author.displayname}}</b></a>  <a class="prettylinks" href="{{ comment.author.get_absolute_url }}"><small><b>@{{ comment.author.username }}</b></small></a> <small>{{ comment.timestamp|timesince }} ago</small></h6>
                                                 <div>{{ comment.content }}</div>
                                                 <h6> <!--comment interactions-->
                                                         <small> <!--form for comment likes-->
                                                                 <form id="commentlike_form" class="inlineform" method="POST" action="#"  enctype="multipart/form-data"> 
                                                                         {% csrf_token %}
                                                                         <input type="hidden" name="comment" required id ="id_comment" value="{{comment.id}}" />
-                                                                        <input type="hidden" name="user" required id ="id_user" value="{{request.user}}" />
-                                                                        {% if request.user.id in comment.get_likers %}
+                                                                        <input type="hidden" name="author" required id ="id_author" value="{{request.user.userprofile}}" />
+                                                                        {% if request.user.userprofile.id in comment.get_likers %}
                                                                         <button type='submit' id="submit" name="submit" class="dislikebutton"><i class="fa fa-heart"></i></button>
                                                                         {% else %}
                                                                         <button type='submit' id="submit" name="submit" class="likebutton"><i class="fa fa-heart"></i></button>
@@ -101,14 +101,14 @@
                                                 
                                                 {% for reply in comment.get_replies %}
                                                         <div class="reply">
-                                                                <h6><a class="prettylinks" href="{{ reply.user.userprofile.get_absolute_url }}"><img id="comment_image" src="{{MEDIA_URL}}{{ reply.user.userprofile.picture }}"></img></a> <a class="prettylinks" href="{{ reply.user.userprofile.get_absolute_url }}"><b>{{reply.user.userprofile.displayname}}</b></a>  <a class="prettylinks" href="{{ reply.user.userprofile.get_absolute_url }}"><small><b>@{{ reply.user.username }}</b></small></a> <small>{{ reply.timestamp|timesince }} ago</small></h6>
-                                                                <div>{% if reply.from_user and reply.from_user != reply.user %}<a class="prettylinks" href="{{ reply.from_user.userprofile.get_absolute_url }}"><small><b>@{{reply.from_user.username}}</b></small></a> {% endif %}{{ reply.content }}</div> 
+                                                                <h6><a class="prettylinks" href="{{ reply.author.get_absolute_url }}"><img id="comment_image" src="{{MEDIA_URL}}{{ reply.author.picture }}"></img></a> <a class="prettylinks" href="{{ reply.user.userprofile.get_absolute_url }}"><b>{{reply.author.displayname}}</b></a>  <a class="prettylinks" href="{{ reply.author.get_absolute_url }}"><small><b>@{{ reply.author.user.username }}</b></small></a> <small>{{ reply.timestamp|timesince }} ago</small></h6>
+                                                                <div>{% if reply.from_user and reply.from_user != reply.userprofile %}<a class="prettylinks" href="{{ reply.from_user.get_absolute_url }}"><small><b>@{{reply.from_user.user.username}}</b></small></a> {% endif %}{{ reply.content }}</div> 
                                                                 <h6> 
                                                                         <small>
                                                                                 <form id="replylike_form" class="inlineform" method="POST" action="#"  enctype="multipart/form-data">
                                                                                         {% csrf_token %}
                                                                                         <input type="hidden" name="reply" required id ="id_reply" value="{{reply.id}}" />
-                                                                                        <input type="hidden" name="user" required id ="id_user" value="{{request.user}}" />
+                                                                                        <input type="hidden" name="author" required id ="id_author" value="{{request.user.userprofile}}" />
                                                                                         {% if request.user.id in reply.get_likers %}
                                                                                         <button type='submit' id="submit" name="submit" class="dislikebutton"><i class="fa fa-heart"></i></button>
                                                                                         {% else %}
@@ -162,7 +162,7 @@
                                 {% if burst.get_comments %}
                                 <hr/>
                                 {% for comment in burst.get_comments %}
-                                        <h6><img id="comment_image" src="{{MEDIA_URL}}{{ comment.user.userprofile.picture }}"></img><b>{{comment.user.userprofile.displayname}}</b><small><b>@{{ comment.user.username }}</b></small></a> <small>{{ comment.timestamp|timesince }} ago</small></h6>
+                                        <h6><img id="comment_image" src="{{MEDIA_URL}}{{ comment.author.picture }}"></img><b>{{comment.author.displayname}}</b><small><b>@{{ comment.author.user.username }}</b></small></a> <small>{{ comment.timestamp|timesince }} ago</small></h6>
                                         <div>{{ comment.content }}</div>
                                         <br/>
                                 
