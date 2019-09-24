@@ -1,5 +1,9 @@
 from rest_framework import serializers
 from .models import Category, Burst, Comment, Reply, BurstLike, CommentLike, ReplyLike
+from userprofile.models import userprofile
+from userprofile.serializers import userSerializer, userprofileSerializer
+from django.contrib.auth.models import User
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -8,12 +12,16 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class BurstSerializer(serializers.ModelSerializer):
+    author = userprofileSerializer(many=False)
+    categories = CategorySerializer(many=True)
     class Meta:
         model = Burst
-        fields = '__all__'
+        fields = ['id', 'author', 'title', 'bodytext', 'timestamp', 'picture', 'comment_count', 'view_count', 'overview', 'categories', 'trackstarz_article']
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    burst = BurstSerializer()
+    userprofile = userprofileSerializer()
     class Meta:
         model = Comment
         fields = '__all__'

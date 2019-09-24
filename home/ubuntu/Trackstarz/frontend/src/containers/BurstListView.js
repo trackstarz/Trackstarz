@@ -10,7 +10,9 @@ import BurstForm from '../components/BurstForm';
 class BurstList extends React.Component {
     
     state = {
-        bursts: []
+        bursts: [],
+        userprofiles: [],
+        users: []
     }
 
     fetchBursts = () => {
@@ -18,6 +20,24 @@ class BurstList extends React.Component {
             .then(res => {
                 this.setState({
                     bursts: res.data
+                });
+            });
+    }
+
+    fetchUserProfiles = () => {
+        axios.get('http://34.222.26.155:8080/api/userprofiles/')
+            .then(res => {
+                this.setState({
+                    userprofiles: res.data
+                });
+            });
+    }
+
+    fetchUsers = () => {
+        axios.get('http://34.222.26.155:8080/api/users/')
+            .then(res => {
+                this.setState({
+                    users: res.data
                 });
             });
     }
@@ -32,6 +52,8 @@ class BurstList extends React.Component {
                 Authorization: newProps.token
             }
             this.fetchBursts();
+            this.fetchUserProfiles();
+            this.fetchUsers();
             
         }
     }
@@ -49,7 +71,12 @@ class BurstList extends React.Component {
                     <div key={this.state.bursts.id}>
                             {this.state.bursts.map(burst => (
                                 <div style={{ marginBottom: 10, borderRadius: 5, padding: 10, background: '#fff'}}>
-                                
+                                { this.state.userprofiles.filter(author => (burst.author === author.user)).map(author => 
+                                <div> 
+                                <h4><img src={ author.picture } style={{ objectFit: "cover", objectPosition: "50% 0", width: 40, height: 40, borderRadius: "50%"}} /> <b>{author.displayname}</b> <small><b>{author.username}</b></small> <small> {burst.timestamp}</small></h4></div> )
+                                   
+                                     } 
+                                { burst.author.username } { burst.author.picture }
                                 { burst.title != null &&
                                 <h2>{burst.title}</h2>
                                 }
