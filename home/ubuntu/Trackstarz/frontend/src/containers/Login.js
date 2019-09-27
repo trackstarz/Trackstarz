@@ -3,6 +3,7 @@ import { Form, Icon, Input, Button } from 'antd';
 import {connect} from 'react-redux';
 import {NavLink} from 'react-router-dom';
 import * as actions from '../store/actions/auth';
+import '../style.css';
 
 import { Spin } from 'antd';
 

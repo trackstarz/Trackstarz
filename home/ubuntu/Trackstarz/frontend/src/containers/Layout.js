@@ -3,6 +3,7 @@ import { Layout, Menu } from 'antd';
 import * as actions from '../store/actions/auth';
 import { connect } from 'react-redux';
 import { Link, withRouter }  from 'react-router-dom'
+import '../style.css';
 
 const { Header, Content, Footer, Sider} = Layout;
 

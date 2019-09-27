@@ -2,6 +2,7 @@ import React from 'react';
 import axios from'axios';
 import {connect} from 'react-redux';
 import { Card } from 'antd';
+import '../style.css';
 
 class BurstDetail extends React.Component {
     

@@ -8,6 +8,7 @@ import {
     Button
   } from 'antd';
 import { NavLink } from 'react-router-dom';
+import '../style.css';
   
 
 

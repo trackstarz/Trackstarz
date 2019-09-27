@@ -20,32 +20,40 @@ class BurstSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    burst = BurstSerializer()
     author = userprofileSerializer()
     class Meta:
         model = Comment
+        depth = 0
         fields = '__all__'
 
 
 class ReplySerializer(serializers.ModelSerializer):
+    comment = CommentSerializer()
+    author = userprofileSerializer()
     class Meta:
         model = Reply
         fields = '__all__'
 
 
 class BurstLikeSerializer(serializers.ModelSerializer):
+    author = userprofileSerializer()
+    burst = BurstSerializer()
     class Meta:
         model = BurstLike
         fields = '__all__'
 
 
 class CommentLikeSerializer(serializers.ModelSerializer):
+    author = userprofileSerializer()
+    comment = CommentSerializer()
     class Meta:
         model = CommentLike
         fields = '__all__'
 
 
 class ReplyLikeSerializer(serializers.ModelSerializer):
+    author = userprofileSerializer()
+    reply = ReplySerializer()
     class Meta:
         model = ReplyLike
         fields = '__all__'
