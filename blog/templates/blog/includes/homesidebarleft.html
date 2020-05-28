@@ -1,0 +1,18 @@
+<ul class="nav navbar-nav navbar-left">
+        {% if user.is_authenticated %}
+        <div class="info_pill">
+        <li><a class="prettylinks" href="{{ request.user.userprofile.get_absolute_url }}"><img class="rounded" src="{{MEDIA_URL}}{{request.user.userprofile.picture}}" width="100%" height="auto" /></a></li>
+        
+        <h4 class="nudgedown"><a class="prettylinks" href="{{ request.user.userprofile.get_absolute_url }}">{{request.user.userprofile.displayname}}</a></h4>
+        <h6><a class="prettylinks" href="{{ request.user.userprofile.get_absolute_url }}">@{{ request.user.username }}</a></h6>
+        </div>
+        <br/>
+        <p class="sidebarmenu"><a href="/universe/{{request.user.userprofile.slug}}"><i class="fa fa-home" aria-hidden="true"></i> HOME</a></p>
+        <p class="sidebarmenu"><a href="/universe/"><i class="fa fa-globe" aria-hidden="true"></i> UNIVERSE</a></p>
+
+	{% else %}
+        <div class="info_pill">
+                <h6>Welcome to the Trackstarz Universe!</h6>
+        </div>
+	{% endif %}
+
