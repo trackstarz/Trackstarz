@@ -1,5 +1,0 @@
-{% if user.is_authenticated %}
-    <img class="feature" src="{{MEDIA_URL}}{{request.user.userprofile.coverphoto}}" />
-{% else %}
-    <img class="feature" src="{{MEDIA_URL}}post_pics/2019/07/29/bw-background_16x9.jpg" />
-{% endif %}
