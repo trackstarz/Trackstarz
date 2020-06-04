@@ -22,10 +22,20 @@ from blog.forms import UserForm, BurstForm, CommentForm
 
 from blog.models import Burst, Comment
 
+from universe.serializers import friendrequestSerializer
+
+from rest_framework import viewsets
+
 
 
 # Create your views here.
 User = get_user_model()
+
+
+class FriendrequestView(viewsets.ModelViewSet):
+    serializer_class = friendrequestSerializer
+    queryset = friendrequest.objects.all()
+
 
 
 def universe_view(request):

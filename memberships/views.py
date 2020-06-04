@@ -18,10 +18,30 @@ from userprofile.models import userprofile
 
 from django.contrib.auth import get_user_model
 
+from memberships.serializers import MembershipSerializer, UserMembershipSerializer, SubscriptionSerializer
+
+from rest_framework import viewsets
+
 
 
 # Create your views here.
 User = get_user_model()
+
+class MembershipView(viewsets.ModelViewSet):
+    serializer_class = MembershipSerializer
+    queryset = Membership.objects.all()
+
+
+class UserMembershipView(viewsets.ModelViewSet):
+    serializer_class = UserMembershipSerializer
+    queryset = UserMembership.objects.all()
+
+
+class SubscriptionView(viewsets.ModelViewSet):
+    serializer_class = SubscriptionSerializer
+    queryset = Subscription.objects.all()
+
+
 
 def profile_view(request):
 	

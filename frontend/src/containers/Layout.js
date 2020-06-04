@@ -1,40 +1,81 @@
 import React from 'react';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu } from 'antd';
+import * as actions from '../store/actions/auth';
+import { connect } from 'react-redux';
+import { Link, withRouter }  from 'react-router-dom'
+import '../style.css';
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content, Footer, Sider} = Layout;
 
-const CustomLayout = (props) => {
-  return (
+class CustomLayout extends React.Component {
+  render() {
 
-    <Layout className="layout">
-      <Header>
-        <div className="logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={['2']}
-          style={{ lineHeight: '64px' }}
-        >
-          <Menu.Item key="1">nav 1</Menu.Item>
-          <Menu.Item key="2">nav 2</Menu.Item>
-          <Menu.Item key="3">nav 3</Menu.Item>
-        </Menu>
-      </Header>
-      <Content style={{ padding: '0 50px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
-        </Breadcrumb>
-          <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
-            {props.children}
+    return (
+
+      <Layout className="layout">
+        <Header className="header">
+          <div className="logo" />
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={['1']}
+            style={{ lineHeight: '64px' }}
+          >
+          <Menu.Item key="1"><Link to="/">Home</Link></Menu.Item>
+          {
+            this.props.isAuthenticated ?
+  
+            <Menu.Item key="2" onClick={this.props.logout}>
+              Logout
+            </Menu.Item>
+          
+          
+          :
+  
+          <Menu.Item key="2"><Link to="/login">Login</Link></Menu.Item>
+        }
+            
+          </Menu>
+        </Header>
+        <Layout>
+          <div style={{ background: '#fff', minHeight: 400 }}>
+  
           </div>
-      </Content>
-      <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
-    </Layout>
+  
+        </Layout>
+        <Layout style={{padding: '20px 50px 0px 50px'}}>
+          <Sider width={300} style={{ background: '#f0f2f5', padding: '0 50px' }}>
+          <div style={{ padding: 24, minHeight: 280 }}>
+               
+              </div>
+          </Sider>
+          <Content width={600} style={{ padding: '0 50px' }}>
+              <div style={{ padding: 24, minHeight: 280 }}>
+                {this.props.children}
+              </div>
+          </Content>
+          <Sider width={300} style={{ background: '#f0f2f5', padding: '0 50px' }}>
+          <div style={{ padding: 24, minHeight: 280 }}>
+                
+              </div>
+          </Sider>
+        </Layout>
+        <Footer style={{ textAlign: 'center' }}>Trackstarz ©2019</Footer>
+      </Layout>
+  
+    );
+  }
 
-  );
-}
+  }
+  
+ 
 
-export default CustomLayout;
+    const mapDispatchToProps = dispatch => {
+        return {
+            logout: () => dispatch(actions.logout())
+        }
+    }
+
+    export default withRouter(connect(null, mapDispatchToProps)(CustomLayout));
+
 

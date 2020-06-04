@@ -2,7 +2,7 @@ from django.shortcuts import render, render_to_response, redirect, get_object_or
 
 from django.template import RequestContext
 
-from blog.models import Burst, BurstLike, CommentLike, ReplyLike
+from blog.models import Category, Burst, Comment, Reply, BurstLike, CommentLike, ReplyLike
 
 from blog.forms import UserForm, BurstForm, CommentForm, ReplyForm, BurstLikeForm, CommentLikeForm, ReplyLikeForm
 
@@ -22,12 +22,44 @@ from userprofile.models import userprofile
 
 from rest_framework import viewsets
 
-from blog.serializers import BurstSerializer
+from blog.serializers import CategorySerializer, BurstSerializer, CommentSerializer, ReplySerializer, BurstLikeSerializer, CommentLikeSerializer, ReplyLikeSerializer
+
+
+class CategoryView(viewsets.ModelViewSet):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
 
 
 class BurstView(viewsets.ModelViewSet):
     serializer_class = BurstSerializer
     queryset = Burst.objects.all()
+
+
+class CommentView(viewsets.ModelViewSet):
+    serializer_class = CommentSerializer
+    queryset = Comment.objects.all()
+
+
+class ReplyView(viewsets.ModelViewSet):
+    serializer_class = ReplySerializer
+    queryset = Reply.objects.all()
+
+
+class BurstLikeView(viewsets.ModelViewSet):
+    serializer_class = BurstLikeSerializer
+    queryset = BurstLike.objects.all()
+
+
+class CommentLikeView(viewsets.ModelViewSet):
+    serializer_class = CommentLikeSerializer
+    queryset = CommentLike.objects.all()
+
+
+class ReplyLikeView(viewsets.ModelViewSet):
+    serializer_class = ReplyLikeSerializer
+    queryset = ReplyLike.objects.all()
+
+
 
 
 
@@ -60,7 +92,7 @@ def home(request):
 
         if burst_form.is_valid():
             burst = burst_form.save(commit=False)
-            burst.author = request.user
+            burst.author = request.user.username
             burst.timestamp = timezone.now()
             if 'picture' in request.FILES:
                 burst.picture = request.FILES['picture']
@@ -71,7 +103,7 @@ def home(request):
 
 
         if comment_form.is_valid():
-            comment_form.instance.user = request.user
+            comment_form.instance.author = request.user.userprofile
             comment_form.save()
             return redirect("/")
         else:
@@ -79,7 +111,7 @@ def home(request):
 
 
         if reply_form.is_valid():
-            reply_form.instance.user = request.user
+            reply_form.instance.author = request.user.userprofile
             reply_form.save()
             return redirect("/")
         else:
@@ -89,10 +121,10 @@ def home(request):
         if burstlike_form.is_valid():
             burstlikes = BurstLike.objects.all()
             myburst = burstlike_form.save(commit=False)
-            burstlike_form.instance.user = request.user
+            burstlike_form.instance.author = request.user.userprofile
 
-            if burstlikes.filter(burst=myburst.burst).exists() and burstlikes.filter(user=myburst.user).exists():
-                burstlikes.filter(burst=myburst.burst, user=myburst.user).first().delete()
+            if burstlikes.filter(burst=myburst.burst).exists() and burstlikes.filter(author=myburst.author).exists():
+                burstlikes.filter(burst=myburst.burst, author=myburst.author).first().delete()
             else:
                 burstlike_form.save()
                 return redirect("/")
@@ -103,10 +135,10 @@ def home(request):
         if commentlike_form.is_valid():
             commentlikes = CommentLike.objects.all()
             mycomment = commentlike_form.save(commit=False)
-            commentlike_form.instance.user = request.user
+            commentlike_form.instance.author = request.user.userprofile
 
-            if commentlikes.filter(comment=mycomment.comment).exists() and commentlikes.filter(user=mycomment.user).exists():
-                commentlikes.filter(comment=mycomment.comment, user=mycomment.user).first().delete()
+            if commentlikes.filter(comment=mycomment.comment).exists() and commentlikes.filter(author=mycomment.author).exists():
+                commentlikes.filter(comment=mycomment.comment, author=mycomment.author).first().delete()
             else:
                 commentlike_form.save()
                 return redirect("/")
@@ -118,10 +150,10 @@ def home(request):
         if replylike_form.is_valid():
             replylikes = ReplyLike.objects.all()
             myreply = replylike_form.save(commit=False)
-            replylike_form.instance.user = request.user
+            replylike_form.instance.author = request.user.userprofile
 
-            if replylikes.filter(reply=myreply.reply).exists() and replylikes.filter(user=myreply.user).exists():
-                replylikes.filter(reply=myreply.reply, user=myreply.user).first().delete()
+            if replylikes.filter(reply=myreply.reply).exists() and replylikes.filter(author=myreply.author).exists():
+                replylikes.filter(reply=myreply.reply, author=myreply.author).first().delete()
             else:
                 replylike_form.save()
                 return redirect("/")
