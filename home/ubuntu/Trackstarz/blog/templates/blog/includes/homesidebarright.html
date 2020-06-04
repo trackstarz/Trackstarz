@@ -1,0 +1,15 @@
+<div class="info_pill">
+    <h4 class="center-text nudgedown">FEATURED</h4>
+    {% for burst in burst|dictsortreversed:"timestamp" %}
+        {% if burst.picture and burst.trackstarz_article %}
+        <div class="sidebar">
+        <img class="sidebar_images" src="{{MEDIA_URL}}{{burst.picture}}"></img>
+        </div>
+        {% endif %}
+        
+    {% endfor %}
+
+
+</div>
+
+
