@@ -1,6 +1,6 @@
 import React from 'react';
-import axios from'axios';
-import {connect} from 'react-redux';
+import axios from 'axios';
+import { connect } from 'react-redux';
 import { Card } from 'antd';
 import '../style.css';
 
@@ -10,12 +10,11 @@ class BurstDetail extends React.Component {
         burst: {}
     }
 
-    componentWillReceiveProps(newProps) {
-        console.log(newProps);
-        if(newProps.token) {
+    componentDidUpdate(prevProps) {
+        if (this.props.token && this.props.token !== prevProps.token) {
             axios.defaults.headers = {
                 "Content-Type": "application/json",
-                Authorization: newProps.token
+                Authorization: this.props.token
             }
             const burstID = this.props.match.params.burstID;
             axios.get(`http://34.222.26.155:8080/api/bursts/${burstID}/`)
@@ -35,19 +34,24 @@ class BurstDetail extends React.Component {
                 "Content-Type": "application/json",
                 Authorization: this.props.token
             }
-            axios.delte(`http://34.222.26.155:8080/api/${burstID}/`);
-            this.props.history.push('/');
-            this.forceUpdate();
+            axios.delete(`http://34.222.26.155:8080/api/bursts/${burstID}/`)
+            .then(() => {
+                this.props.history.push('/');
+                this.forceUpdate();
+            })
+            .catch(error => {
+                console.log(error);
+            });
         } else {
             //show some kind of message
         }
-        
     }
     
     render() {
         return (
             <Card title={this.state.burst.title}>
                 <p>{this.state.burst.bodytext}</p>
+                <button onClick={this.handleDelete}>Delete Burst</button>
             </Card>
         )
     }
@@ -55,8 +59,8 @@ class BurstDetail extends React.Component {
 
 const mapStateToProps = state => {
     return {
-      token: state.token
+        token: state.token
     }
-  }
+}
 
 export default connect(mapStateToProps)(BurstDetail);

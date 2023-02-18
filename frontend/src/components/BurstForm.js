@@ -36,7 +36,7 @@ class BurstForm extends React.Component {
     return (
       <div>
         <h2>Update Status</h2>
-        <Form className="burst_inputs" id="comment_form" onSubmit={(event) => this.handleFormSubmit(
+        <Form className="burst_inputs" id="burst_form" onSubmit={(event) => this.handleFormSubmit(
             event,
             this.props.requestType,
             this.props.burstID

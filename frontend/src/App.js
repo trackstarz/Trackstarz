@@ -10,6 +10,7 @@ import CustomLayout from './containers/Layout';
 class App extends Component {
 
   componentDidMount() {
+    // When the component is mounted, it will try to authenticate the user using the token stored in localStorage
     this.props.onTryAutoSignup();
   }
 
@@ -28,12 +29,14 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
+    // If the token is not null, the user is authenticated
     isAuthenticated: state.token !== null
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
+    // This function dispatches the authCheckState action that checks if the user is authenticated or not
     onTryAutoSignup: () => dispatch(actions.authCheckState())
   }
 }
