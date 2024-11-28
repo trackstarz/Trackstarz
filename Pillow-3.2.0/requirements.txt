@@ -1,6 +1,6 @@
 # Development, documentation & testing requirements.
 -e .
-Babel==2.2.0
+Babel==2.9.1
 Jinja2==2.8
 MarkupSafe==0.23
 Pygments==2.1.3
